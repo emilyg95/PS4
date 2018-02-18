@@ -18,3 +18,18 @@ car_pos = function(door_choice, car_door){ ## a function that takes as inputs th
 # a false if they are not
 
 car_pos(2, car1) ## test
+
+setClass(Class = "door", ## creates a new class "door"
+         representation = representation(
+           chosenDoor = "integer",
+           carDoor = "integer",
+           switch = "logical"
+           )
+           ## indicates 3 inputs; carDoor which must be an integer, switch which must be a boolean, and winner which must be a boolean
+)
+
+getSlots("door")
+
+
+
+
