@@ -90,10 +90,14 @@ chooseDoor = function(object){ ## creates a function for the interior of setMeth
 }
 
 CD1 = 1  ## creates a test value to check interior of function
-RD1 = 1 ## creates a test value to check interior of function
+RD1 = 2 ## creates a test value to check interior of function
 x = Filter(function(x) x != CD1 & x != RD1, 1:3) ## check
+x = sample(x, 1)
 
-Door4 = chooseDoor(Door1) ## check
+Door4 = chooseDoor(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE)) ## check
+
+debug(chooseDoor)
+chooseDoor(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE))
 
 setMethod("PlayGame", "door", ## creates a new method for door objects called PlayGame
           function(object){ ## function which intakes an object of class door
