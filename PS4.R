@@ -67,3 +67,47 @@ new("door", chosenDoor = 3, carDoor = 2, switch = TRUE) ## check on valid object
 
 new("door", chosenDoor = 3, carDoor = 6, switch = TRUE) ## check on invalid object 
 
+generic = function(object = "door"){ ## creates interior function for setGeneric, which defines the function as PlayGame and its generic input as of class door
+  standardGeneric("PlayGame")
+}
+
+setGeneric("PlayGame", generic) ## sets the generic of function PlayGame as the function I just created
+
+chooseDoor = function(object){ ## creates a function for the interior of setMethod
+  object@carDoor = sample(1:3, 1) ## sets the input for the carDoor slot as a randomly selected number between 1 and 3
+  chosenDoor1 = sample(1:3, 1) ## chooses a number between 1 and 3 randomly to be the player's first selection 
+  removeDoor = as.numeric(sample(1:3, 1) != object@carDoor | chosenDoor1) ## selects a door to be removed which is a random number between 1 and 3 not equal to either carDoor or the player's initial chosen door
+  if (object@switch == FALSE){ ## if else statement which sets chosenDoor equal to the initially selected door chosenDoor1 if switch is FALSE
+    object@chosenDoor = chosenDoor1
+    return(object) ## returns the new object
+  }
+  else{
+    object@chosenDoor = as.numeric(sample(1:3, 1) != chosenDoor1 | removeDoor) ## sets chosen door equal to a new value between 1 and 3 not equal to either the initial chosen door or the removed door if switch is TRUE
+    return(object) ## returns the new object
+  }
+}
+
+CD1 = 2  ## creates a test value to check interior of function
+RD1 = 3 ## creates a test value to check interior of function
+x = as.numeric(sample(1:3, 1) != CD1 | RD1) ## check
+
+Door3 = chooseDoor(Door1) ## check
+
+setMethod("PlayGame", "door", ## creates a new method for door objects called PlayGame
+          function(object){ ## function which intakes an object of class door
+            object = chooseDoor(object) ## sets a new object using the chooseDoor function I just created
+            if (object@chosenDoor == object@carDoor){ ## if else statements that creates an object called winner and sets it equal to TRUE if the chosen door is equal to the door with the car
+              winner = TRUE
+              return(winner) ## returns winner
+            }
+            else{
+              winner = FALSE ## if else statements that creates an object called winner and sets it equal to FALSE if the chosen door is not equal to the door with the car
+              return(winner) ## returns winner
+            }
+          }
+)
+          
+PlayGame(Door3) ## check
+
+
+
