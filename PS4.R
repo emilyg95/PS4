@@ -6,6 +6,7 @@ car_door = function(x){
 car1 = car_door("car1")
 
 car_pos = function(door_choice, car_door){ ## a function that takes as inputs the choice of door and the placement of the car
+  browser()
   if (door_choice == car_door){  ## if then statement which says to return true if the choice of door equals the placement of the car and false otherwise
     return(TRUE)
     } 
@@ -75,15 +76,15 @@ setGeneric("PlayGame", generic) ## sets the generic of function PlayGame as the 
 
 chooseDoor = function(object){ ## creates a function for the interior of setMethod
   object@carDoor = sample(1:3, 1) ## sets the input for the carDoor slot as a randomly selected number between 1 and 3
-  chosenDoor1 = sample(1:3, 1) ## chooses a number between 1 and 3 randomly to be the player's first selection 
-  removeDoor = Filter(function(x) x != object@carDoor & x != chosenDoor1, 1:3) ## selects a door to be removed which is a random number between 1 and 3 not equal to either carDoor or the player's initial chosen door
-  removeDoor = sample(removeDoor, 1)
+  object@chosenDoor = sample(1:3, 1) ## chooses a number between 1 and 3 randomly to be the player's first selection 
+  removeDoor = Filter(function(x) x != object@carDoor & x != object@chosenDoor, 1:3) ## selects a door to be removed which is a random number between 1 and 3 not equal to either carDoor or the player's initial chosen door
+  removeDoor = unlist(sample(removeDoor, 1))
   if (object@switch == FALSE){ ## if else statement which sets chosenDoor equal to the initially selected door chosenDoor1 if switch is FALSE
-    object@chosenDoor = chosenDoor1
+    object@chosenDoor = object@chosenDoor
     return(object) ## returns the new object
   }
   else if (object@switch == TRUE){
-    chosenDoor2 = Filter(function(x) x != chosenDoor1 & x != removeDoor, 1:3) ## sets chosen door equal to a new value between 1 and 3 not equal to either the initial chosen door or the removed door if switch is TRUE
+    chosenDoor2 = Filter(function(x) x != object@chosenDoor & x != removeDoor, 1:3) ## sets chosen door equal to a new value between 1 and 3 not equal to either the initial chosen door or the removed door if switch is TRUE
     object@chosenDoor = sample(chosenDoor2, 1)
     return(object) ## returns the new object
   }
@@ -92,12 +93,13 @@ chooseDoor = function(object){ ## creates a function for the interior of setMeth
 CD1 = 1  ## creates a test value to check interior of function
 RD1 = 2 ## creates a test value to check interior of function
 x = Filter(function(x) x != CD1 & x != RD1, 1:3) ## check
-x = sample(x, 1)
+x = (sample(x, 1))
 
 Door4 = chooseDoor(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE)) ## check
 
 debug(chooseDoor)
 chooseDoor(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE))
+undebug(chooseDoor)
 
 setMethod("PlayGame", "door", ## creates a new method for door objects called PlayGame
           function(object){ ## function which intakes an object of class door
@@ -112,13 +114,17 @@ setMethod("PlayGame", "door", ## creates a new method for door objects called Pl
             }
           }
 )
-          
+ 
+debug(PlayGame)  
+PlayGame(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE))
+undebug(PlayGame)
+
 PlayGame(Door3) ## check
 
 PlayGame(newDoor(3,2,TRUE))
 
 simulate_T = replicate(1000, PlayGame(newDoor(sample(1:3, 1), sample(1:3, 1), TRUE))) ## replicate reevaluates PlayGame 1000 times with inputs of random samples of 1 through 3 and switch = TRUE
-table(simulate_T) ## when switch = TRUE the player wins 409 times and loses 591 times
+table(simulate_T) ## when switch = TRUE the player wins 409 times and loses 591 times - this is a bit strange because it's not as close to 50% as I would have thought but I ran through the code with debug and it seems to work correctly 
 
 simulate_F = replicate(1000, PlayGame(newDoor(sample(1:3, 1), sample(1:3, 1), FALSE)))
 table(simulate_F) ## when switch = FALSE the player wins 362 times and loses 638 times
