@@ -6,7 +6,6 @@ car_door = function(x){
 car1 = car_door("car1")
 
 car_pos = function(door_choice, car_door){ ## a function that takes as inputs the choice of door and the placement of the car
-  browser()
   if (door_choice == car_door){  ## if then statement which says to return true if the choice of door equals the placement of the car and false otherwise
     return(TRUE)
     } 
@@ -91,7 +90,7 @@ chooseDoor = function(object){ ## creates a function for the interior of setMeth
 }
 
 CD1 = 1  ## creates a test value to check interior of function
-RD1 = 2 ## creates a test value to check interior of function
+RD1 = 1 ## creates a test value to check interior of function
 x = Filter(function(x) x != CD1 & x != RD1, 1:3) ## check
 x = (sample(x, 1))
 
